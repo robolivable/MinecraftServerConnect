@@ -50,6 +50,7 @@
       this.exportSaveFilePathBrowseButton = new System.Windows.Forms.Button();
       this.rsaKeyFileBrowserDialog = new System.Windows.Forms.OpenFileDialog();
       this.exportSaveFileDialog = new System.Windows.Forms.SaveFileDialog();
+      this.serverPortOverrideCheckBox = new System.Windows.Forms.CheckBox();
       this.rsaKeyGroupBox.SuspendLayout();
       this.serverGroupBox.SuspendLayout();
       this.exportGroupBox.SuspendLayout();
@@ -109,6 +110,7 @@
       // 
       // serverGroupBox
       // 
+      this.serverGroupBox.Controls.Add(this.serverPortOverrideCheckBox);
       this.serverGroupBox.Controls.Add(this.serverUserLabel);
       this.serverGroupBox.Controls.Add(this.serverPortLabel);
       this.serverGroupBox.Controls.Add(this.serverUserTextBox);
@@ -253,6 +255,17 @@
       this.exportSaveFileDialog.FileName = "minecraft.key.mskf";
       this.exportSaveFileDialog.FileOk += new System.ComponentModel.CancelEventHandler(this.exportSaveFileDialog_FileOk);
       // 
+      // serverPortOverrideCheckBox
+      // 
+      this.serverPortOverrideCheckBox.AutoSize = true;
+      this.serverPortOverrideCheckBox.Location = new System.Drawing.Point(205, 48);
+      this.serverPortOverrideCheckBox.Name = "serverPortOverrideCheckBox";
+      this.serverPortOverrideCheckBox.Size = new System.Drawing.Size(66, 17);
+      this.serverPortOverrideCheckBox.TabIndex = 8;
+      this.serverPortOverrideCheckBox.Text = "Override";
+      this.serverPortOverrideCheckBox.UseVisualStyleBackColor = true;
+      this.serverPortOverrideCheckBox.CheckedChanged += new System.EventHandler(this.serverPortOverrideCheckBox_CheckedChanged);
+      // 
       // KeyFileGeneratorForm
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -300,5 +313,6 @@
         private System.Windows.Forms.TextBox exportPasswordTextBox;
         private System.Windows.Forms.Label exportSaltLabel;
         private System.Windows.Forms.Label exportPasswordLabel;
-    }
+    private System.Windows.Forms.CheckBox serverPortOverrideCheckBox;
+  }
 }

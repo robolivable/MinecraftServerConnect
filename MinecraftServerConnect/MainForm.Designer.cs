@@ -44,6 +44,7 @@ namespace MinecraftServerConnect
       this.connectedStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
       this.passphraseTextBox = new System.Windows.Forms.TextBox();
       this.saltTextBox = new System.Windows.Forms.TextBox();
+      this.connectAsServerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.mainMenuStrip.SuspendLayout();
       this.statusStrip.SuspendLayout();
       this.SuspendLayout();
@@ -63,7 +64,8 @@ namespace MinecraftServerConnect
       // toolsToolStripMenuItem
       // 
       this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.generateKeyFileToolStripMenuItem});
+            this.generateKeyFileToolStripMenuItem,
+            this.connectAsServerToolStripMenuItem});
       this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
       this.toolsToolStripMenuItem.Size = new System.Drawing.Size(47, 20);
       this.toolsToolStripMenuItem.Text = "Tools";
@@ -158,6 +160,7 @@ namespace MinecraftServerConnect
       this.passphraseTextBox.TabIndex = 4;
       this.passphraseTextBox.Text = "Enter Passphrase";
       this.passphraseTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+      this.passphraseTextBox.TextChanged += new System.EventHandler(this.passphraseTextBox_TextChanged);
       this.passphraseTextBox.Enter += new System.EventHandler(this.passphraseTextBox_Enter);
       this.passphraseTextBox.Leave += new System.EventHandler(this.passphraseTextBox_Leave);
       // 
@@ -171,8 +174,16 @@ namespace MinecraftServerConnect
       this.saltTextBox.TabIndex = 5;
       this.saltTextBox.Text = "Salt (optional)";
       this.saltTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+      this.saltTextBox.TextChanged += new System.EventHandler(this.saltTextBox_TextChanged);
       this.saltTextBox.Enter += new System.EventHandler(this.saltTextBox_Enter);
       this.saltTextBox.Leave += new System.EventHandler(this.saltTextBox_Leave);
+      // 
+      // connectAsServerToolStripMenuItem
+      // 
+      this.connectAsServerToolStripMenuItem.Name = "connectAsServerToolStripMenuItem";
+      this.connectAsServerToolStripMenuItem.Size = new System.Drawing.Size(218, 22);
+      this.connectAsServerToolStripMenuItem.Text = "Connect As Server";
+      this.connectAsServerToolStripMenuItem.Click += new System.EventHandler(this.connectAsServerToolStripMenuItem_Click);
       // 
       // MainForm
       // 
@@ -219,6 +230,7 @@ namespace MinecraftServerConnect
         private System.Windows.Forms.ToolStripStatusLabel connectedStripStatusLabel;
         private System.Windows.Forms.TextBox passphraseTextBox;
         private System.Windows.Forms.TextBox saltTextBox;
-    }
+    private System.Windows.Forms.ToolStripMenuItem connectAsServerToolStripMenuItem;
+  }
 }
 
