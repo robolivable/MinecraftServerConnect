@@ -64,5 +64,9 @@ namespace MinecraftServerConnect {
       this.minecraftKeyFilePath = exportSaveFileDialog.FileName;
       exportSaveFilePathTextBox.Text = this.minecraftKeyFilePath;
     }
+
+    private void serverPortOverrideCheckBox_CheckedChanged(object sender, EventArgs e) {
+      serverPortTextBox.ReadOnly = !serverPortOverrideCheckBox.Checked;
+    }
   }
 }
