@@ -195,10 +195,16 @@ namespace MinecraftServerConnect {
 
     private void passphraseTextBox_TextChanged(object sender, EventArgs e) {
       this.passphrase = passphraseTextBox.Text;
+      if (this.passphrase == ClientConfig.UIDefaults.PassphraseTextBox.Placeholder) {
+        this.passphrase = "";
+      }
     }
 
     private void saltTextBox_TextChanged(object sender, EventArgs e) {
       this.salt = saltTextBox.Text;
+      if (this.salt == ClientConfig.UIDefaults.SaltTextBox.Placeholder) {
+        this.salt = "";
+      }
     }
   }
 }
