@@ -98,7 +98,6 @@ namespace MinecraftServerConnect {
     private void openKeyFileDialog_FileOk(object sender, CancelEventArgs e) {
       try {
         string values = Crypto.decrypt(File.ReadAllBytes(openKeyFileDialog.FileName), this.passphrase, this.salt);
-        Console.WriteLine(values);
         string[] split = values.Split(new char[] { '|' });
         string keyFileType = split[0];
         this.domainName = split[1];
