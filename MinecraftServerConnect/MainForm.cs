@@ -12,10 +12,13 @@ namespace MinecraftServerConnect {
     private delegate void SafeCallDelegate(bool value);
     private bool isConnected = false;
     private bool isConnectionRequested = false;
+    private bool isConnectionAsServerRequested = false;
     private PrivateKeyFile privateKeyFile;
     private string domainName;
     private string user;
     private string port;
+    private string passphrase = "";
+    private string salt = "";
 
     public MainForm() {
       InitializeComponent();
@@ -54,11 +57,35 @@ namespace MinecraftServerConnect {
       statusStrip.Items[0].Text = ClientConfig.UIDefaults.StatusStrip.Status.UiText(value);
     }
 
+    private void setPassphraseTextBoxEnabledSafe(bool value) {
+      if (passphraseTextBox.InvokeRequired) {
+        passphraseTextBox.Invoke(
+            new SafeCallDelegate(setPassphraseTextBoxEnabledSafe),
+            new object[] { value }
+        );
+        return;
+      }
+      passphraseTextBox.Enabled = value;
+    }
+
+    private void setSaltTextBoxEnabledSafe(bool value) {
+      if (saltTextBox.InvokeRequired) {
+        saltTextBox.Invoke(
+            new SafeCallDelegate(setSaltTextBoxEnabledSafe),
+            new object[] { value }
+        );
+        return;
+      }
+      saltTextBox.Enabled = value;
+    }
+
     private void setIsConnected(bool value) {
       this.isConnected = value;
       this.setDisconnectButtonEnabledSafe(this.isConnected);
       this.setConnectButtonEnabledSafe(!this.isConnected);
       this.setConnectedStatusStripTextSafe(this.isConnected);
+      this.setPassphraseTextBoxEnabledSafe(!this.isConnected);
+      this.setSaltTextBoxEnabledSafe(!this.isConnected);
     }
 
     private void connectButton_Click(object sender, EventArgs e) {
@@ -70,7 +97,7 @@ namespace MinecraftServerConnect {
 
     private void openKeyFileDialog_FileOk(object sender, CancelEventArgs e) {
       try {
-        string values = Crypto.decrypt(File.ReadAllBytes(openKeyFileDialog.FileName), passphraseTextBox.Text, saltTextBox.Text);
+        string values = Crypto.decrypt(File.ReadAllBytes(openKeyFileDialog.FileName), this.passphrase, this.salt);
         string[] split = values.Split(new char[] { '|' });
         string keyFileType = split[0];
         this.domainName = split[1];
@@ -88,6 +115,7 @@ namespace MinecraftServerConnect {
 
     private void disconnectButton_Click(object sender, EventArgs e) {
       this.isConnectionRequested = false;
+      this.isConnectionAsServerRequested = false;
     }
 
     private void connectionDelegate_DoWork(object sender, DoWorkEventArgs e) {
@@ -98,13 +126,21 @@ namespace MinecraftServerConnect {
         using (SshClient client = new SshClient(this.domainName, this.user, this.privateKeyFile)) {
           client.Connect();
           this.setIsConnected(true);
-
-          ForwardedPortLocal port = new ForwardedPortLocal(
+          if (this.isConnectionAsServerRequested) {
+            ForwardedPortRemote port = new ForwardedPortRemote(
               ServerConfig.ClientHost, uint.Parse(this.port),
               ServerConfig.ServerHost, uint.Parse(this.port)
-          );
-          client.AddForwardedPort(port);
-          port.Start();
+            );
+            client.AddForwardedPort(port);
+            port.Start();
+          } else {
+            ForwardedPortLocal port = new ForwardedPortLocal(
+              ServerConfig.ClientHost, uint.Parse(this.port),
+              ServerConfig.ServerHost, uint.Parse(this.port)
+            );
+            client.AddForwardedPort(port);
+            port.Start();
+          }
           while (this.isConnectionRequested) {
             Thread.Sleep(1000);
           }
@@ -146,6 +182,28 @@ namespace MinecraftServerConnect {
     private void saltTextBox_Leave(object sender, EventArgs e) {
       if (string.IsNullOrWhiteSpace(saltTextBox.Text)) {
         saltTextBox.Text = ClientConfig.UIDefaults.SaltTextBox.Placeholder;
+      }
+    }
+
+    private void connectAsServerToolStripMenuItem_Click(object sender, EventArgs e) {
+      if (this.isConnected) {
+        return;
+      }
+      this.isConnectionAsServerRequested = true;
+      openKeyFileDialog.ShowDialog();
+    }
+
+    private void passphraseTextBox_TextChanged(object sender, EventArgs e) {
+      this.passphrase = passphraseTextBox.Text;
+      if (this.passphrase == ClientConfig.UIDefaults.PassphraseTextBox.Placeholder) {
+        this.passphrase = "";
+      }
+    }
+
+    private void saltTextBox_TextChanged(object sender, EventArgs e) {
+      this.salt = saltTextBox.Text;
+      if (this.salt == ClientConfig.UIDefaults.SaltTextBox.Placeholder) {
+        this.salt = "";
       }
     }
   }
