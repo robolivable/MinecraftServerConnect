@@ -1,4 +1,4 @@
-﻿### What?
+### What?
 This app is a TLDR for local forwarding on Windows.
 
 This version is tailored for tunneling to Minecraft servers.
